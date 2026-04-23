@@ -1,4 +1,4 @@
-import { CLAUDE_MODEL_PRESETS, getClaudeModelLabel } from '@hapi/protocol'
+import { CLAUDE_MODEL_PRESETS, CODEX_MODEL_PRESETS, getClaudeModelLabel } from '@hapi/protocol'
 import { describe, expect, it } from 'vitest'
 import { CLAUDE_EFFORT_OPTIONS, MODEL_OPTIONS } from './types'
 
@@ -28,5 +28,13 @@ describe('Claude effort options', () => {
             { value: 'high', label: 'High' },
             { value: 'max', label: 'Max' },
         ])
+    })
+})
+
+describe('Codex model options', () => {
+    it('includes GPT-5.5 first after auto', () => {
+        expect(MODEL_OPTIONS.codex[0]).toEqual({ value: 'auto', label: 'Auto' })
+        expect(MODEL_OPTIONS.codex[1]).toEqual({ value: 'gpt-5.5', label: 'GPT-5.5' })
+        expect(CODEX_MODEL_PRESETS[0]).toBe('gpt-5.5')
     })
 })

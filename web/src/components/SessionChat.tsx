@@ -63,6 +63,7 @@ export function SessionChat(props: {
     const agentFlavor = props.session.metadata?.flavor ?? null
     const controlledByUser = props.session.agentState?.controlledByUser === true
     const codexCollaborationModeSupported = agentFlavor === 'codex' && !controlledByUser
+    const codexRemoteConfigSupported = agentFlavor === 'codex' && props.session.active && !controlledByUser
     const {
         abortSession,
         switchSession,
@@ -75,7 +76,7 @@ export function SessionChat(props: {
         props.api,
         props.session.id,
         agentFlavor,
-        codexCollaborationModeSupported
+        codexRemoteConfigSupported
     )
 
     // Voice assistant integration
@@ -405,14 +406,18 @@ export function SessionChat(props: {
                         contextSize={reduced.latestUsage?.contextSize}
                         controlledByUser={controlledByUser}
                         onCollaborationModeChange={
-                            codexCollaborationModeSupported && props.session.active && !controlledByUser
+                            codexRemoteConfigSupported
                                 ? handleCollaborationModeChange
                                 : undefined
                         }
                         onPermissionModeChange={handlePermissionModeChange}
-                        onModelChange={handleModelChange}
+                        onModelChange={
+                            agentFlavor === 'codex' && !codexRemoteConfigSupported
+                                ? undefined
+                                : handleModelChange
+                        }
                         onModelReasoningEffortChange={
-                            agentFlavor === 'codex' && props.session.active && !controlledByUser
+                            codexRemoteConfigSupported
                                 ? handleModelReasoningEffortChange
                                 : undefined
                         }

@@ -278,7 +278,7 @@ export function HappyComposer(props: {
         () => agentFlavor === 'codex' ? getCodexCollaborationModeOptions() : [],
         [agentFlavor]
     )
-    const claudeModelOptions = useMemo(
+    const modelOptions = useMemo(
         () => getModelOptionsForFlavor(agentFlavor, model),
         [agentFlavor, model]
     )
@@ -586,7 +586,7 @@ export function HappyComposer(props: {
                                 <div className="px-3 pb-1 text-xs font-semibold text-[var(--app-hint)]">
                                     {t('misc.model')}
                                 </div>
-                                {claudeModelOptions.map((option) => (
+                                {modelOptions.map((option) => (
                                     <button
                                         key={option.value ?? 'auto'}
                                         type="button"
@@ -726,7 +726,7 @@ export function HappyComposer(props: {
         showModelSettings,
         showModelReasoningEffortSettings,
         showEffortSettings,
-        claudeModelOptions,
+        modelOptions,
         codexReasoningEffortOptions,
         claudeEffortOptions,
         suggestions,

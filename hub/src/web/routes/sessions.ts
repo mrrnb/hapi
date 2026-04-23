@@ -320,8 +320,11 @@ export function createSessionsRoutes(getSyncEngine: () => SyncEngine | null): Ho
         }
 
         const flavor = sessionResult.session.metadata?.flavor ?? 'claude'
-        if (flavor !== 'claude' && flavor !== 'gemini') {
-            return c.json({ error: 'Model selection is only supported for Claude and Gemini sessions' }, 400)
+        if (flavor !== 'claude' && flavor !== 'gemini' && flavor !== 'codex') {
+            return c.json({ error: 'Model selection is only supported for Claude, Gemini, and Codex sessions' }, 400)
+        }
+        if (flavor === 'codex' && sessionResult.session.agentState?.controlledByUser === true) {
+            return c.json({ error: 'Model selection can only be changed for remote Codex sessions' }, 409)
         }
 
         try {

@@ -167,14 +167,37 @@ export async function runCodex(opts: {
         return value as ReasoningEffort;
     };
 
+    const resolveModel = (value: unknown): string | undefined => {
+        if (value === null) {
+            return undefined;
+        }
+        if (typeof value !== 'string') {
+            throw new Error('Invalid model');
+        }
+        const trimmedModel = value.trim();
+        if (!trimmedModel) {
+            throw new Error('Invalid model');
+        }
+        return trimmedModel;
+    };
+
     session.rpcHandlerManager.registerHandler('set-session-config', async (payload: unknown) => {
         if (!payload || typeof payload !== 'object') {
             throw new Error('Invalid session config payload');
         }
-        const config = payload as { permissionMode?: unknown; modelReasoningEffort?: unknown; collaborationMode?: unknown };
+        const config = payload as {
+            permissionMode?: unknown;
+            model?: unknown;
+            modelReasoningEffort?: unknown;
+            collaborationMode?: unknown;
+        };
 
         if (config.permissionMode !== undefined) {
             currentPermissionMode = resolvePermissionMode(config.permissionMode);
+        }
+
+        if (config.model !== undefined) {
+            currentModel = resolveModel(config.model);
         }
 
         if (config.modelReasoningEffort !== undefined) {
@@ -189,6 +212,7 @@ export async function runCodex(opts: {
         return {
             applied: {
                 permissionMode: currentPermissionMode,
+                model: currentModel ?? null,
                 modelReasoningEffort: currentModelReasoningEffort ?? null,
                 collaborationMode: currentCollaborationMode
             }
