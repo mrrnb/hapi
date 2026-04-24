@@ -76,14 +76,6 @@ export async function runCodex(opts: {
         if (!sessionInstance) {
             return;
         }
-        const sessionModel = sessionInstance.getModel();
-        if (sessionModel !== undefined) {
-            currentModel = sessionModel ?? undefined;
-        }
-        const sessionModelReasoningEffort = sessionInstance.getModelReasoningEffort();
-        if (sessionModelReasoningEffort !== undefined) {
-            currentModelReasoningEffort = (sessionModelReasoningEffort ?? undefined) as ReasoningEffort | undefined;
-        }
         sessionInstance.setPermissionMode(currentPermissionMode);
         sessionInstance.setModel(currentModel ?? null);
         sessionInstance.setModelReasoningEffort(currentModelReasoningEffort ?? null);
